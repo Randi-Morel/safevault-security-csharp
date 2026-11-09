@@ -1,0 +1,53 @@
+@baseUrl = https://localhost:7085
+@token = COPIAR_ACCESS_TOKEN_DEVUELTO_POR_LOGIN
+@noteId = 1
+
+### Datos ficticios de demostración. No son credenciales preinstaladas.
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{"username":"usuario_demo","email":"demo@example.test","password":"Frase de ejemplo para pruebas 927!"}
+
+### Login: copiar accessToken de la respuesta a @token
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{"username":"usuario_demo","password":"Frase de ejemplo para pruebas 927!"}
+
+### Identidad actual
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer {{token}}
+
+### Crear nota: copiar ID de la respuesta a @noteId
+POST {{baseUrl}}/api/notes
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{"title":"Mi nota","content":"Contenido de prueba"}
+
+### Consultar notas propias
+GET {{baseUrl}}/api/notes
+Authorization: Bearer {{token}}
+
+### Actualizar
+PUT {{baseUrl}}/api/notes/{{noteId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{"title":"Nota actualizada","content":"Texto actualizado"}
+
+### Preview HTML codificado
+GET {{baseUrl}}/api/notes/{{noteId}}/preview
+Authorization: Bearer {{token}}
+
+### Se espera 403 con un token User; 200 con un token Admin
+GET {{baseUrl}}/api/admin/users
+Authorization: Bearer {{token}}
+
+### Eliminar
+DELETE {{baseUrl}}/api/notes/{{noteId}}
+Authorization: Bearer {{token}}
+
+### Revocar sesión
+POST {{baseUrl}}/api/auth/logout
+Authorization: Bearer {{token}}

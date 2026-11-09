@@ -1,0 +1,15 @@
+name: Build and security regression tests
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - run: dotnet restore SafeVault.slnx --locked-mode
+      - run: dotnet build SafeVault.slnx -c Release --no-restore
+      - run: dotnet run --project tests/SafeVault.SecurityTests -c Release --no-build -- .
